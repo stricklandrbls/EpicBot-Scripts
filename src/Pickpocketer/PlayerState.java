@@ -230,11 +230,10 @@ class Banking implements PlayerState {
         if(!APIContext.get().bank().isOpen())
             APIContext.get().bank().open();
         else {
+            withdrawNecklaces();
             int foodWithdrawAmount = NecessaryEquipment.minimumFoodCount - APIContext.get().inventory().getCount(Constants.FoodId);
             if(foodWithdrawAmount > 0)
                 APIContext.get().bank().withdraw(foodWithdrawAmount, Constants.FoodId);
-            if(withdrawNecklaces())
-                p.state = States.EquipingItems;
             else {
                 APIContext.get().bank().close();
                 States.Relocating.destination = Constants.FarmingGuildArea;
@@ -260,6 +259,12 @@ class EquipingItems implements PlayerState {
 
     @Override
     public void update(Player p) {
+        if(!APIContext.get().inventory().contains(Constants.Equipment)) {
+            States.Relocating.destination = Constants.FarmingGuildBank;
+            States.Relocating.stateUponArrival = States.Banking;
+            p.state = States.Relocating;
+            return;
+        }
         if(!APIContext.get().equipment().contains(Slot.NECK, Constants.Equipment))
             APIContext.get().inventory().getItem(Constants.Equipment).interact("Wear");
         p.state = States.Pickpocketing;
