@@ -19,6 +19,7 @@ class States {
     public static EquipingItems EquipingItems = new EquipingItems();
     public static Banking Banking = new Banking();
     public static Organizing Organizing = new Organizing();
+    public static Initializing Initializing = new Initializing();
 }
 class DontDropTheseItems implements Predicate<Item>{
     @Override
@@ -40,6 +41,23 @@ class DontDropTheseItems implements Predicate<Item>{
     private String seedName(String item) {
         return item + " seed";
     }
+}
+class NecessaryEquipment implements Predicate<Item> {
+    public static int minimumFoodCount = 10;
+    public static int minimumEquipmentCount = 3;
+    @Override
+    public boolean test(Item t) {
+        if(t.getId() == Constants.FoodId)
+            return true;
+
+        String itemName = t.getName();
+        for(String i : Constants.Equipment) {
+            if(i.equals(itemName))
+                return true;
+        }
+        return false;
+    }
+
 }
 class Constants {
     public static int LowHealth = 50;
@@ -212,11 +230,17 @@ class Banking implements PlayerState {
         if(!APIContext.get().bank().isOpen())
             APIContext.get().bank().open();
         else {
-            APIContext.get().bank().withdraw(15, Constants.FoodId);
+            int foodWithdrawAmount = NecessaryEquipment.minimumFoodCount - APIContext.get().inventory().getCount(Constants.FoodId);
+            if(foodWithdrawAmount > 0)
+                APIContext.get().bank().withdraw(foodWithdrawAmount, Constants.FoodId);
             if(withdrawNecklaces())
                 p.state = States.EquipingItems;
-            else
-                p.state = States.Pickpocketing;
+            else {
+                APIContext.get().bank().close();
+                States.Relocating.destination = Constants.FarmingGuildArea;
+                States.Relocating.stateUponArrival = States.Pickpocketing;
+                p.state = States.Relocating;
+            }
         }
     }
 
@@ -224,8 +248,9 @@ class Banking implements PlayerState {
     public String status() { return "Banking"; }
     public int actionTime() { return 750 + Constants.rand.nextInt(750); }
     private boolean withdrawNecklaces() {
+        int necklaceWithdrawAmount = NecessaryEquipment.minimumEquipmentCount - APIContext.get().inventory().getCount(Constants.Equipment);
         if(!APIContext.get().inventory().contains(Constants.Equipment))
-            return APIContext.get().bank().withdraw(3, Constants.Equipment);
+            return APIContext.get().bank().withdraw(necklaceWithdrawAmount, Constants.Equipment);
         return false;
     }
 
@@ -264,4 +289,33 @@ class Organizing implements PlayerState {
     public String status() { return "Dropping Unwanted Seeds"; }
     public int actionTime() { return 750 + Constants.rand.nextInt(750); }
 
+}
+
+class Initializing implements PlayerState {
+
+    @Override
+    public void update(Player p) {
+        if(playerHasPickpocketingItems()){
+            States.Relocating.destination = Constants.FarmingGuildArea;
+            States.Relocating.stateUponArrival = States.Pickpocketing;
+        }
+        else {
+            States.Relocating.destination = Constants.FarmingGuildBank;
+            States.Relocating.stateUponArrival = States.Banking;
+        }
+        p.state = States.Relocating;
+    }
+
+    @Override
+    public String status() { return "Initializing"; }
+    public int actionTime() { return 750 + Constants.rand.nextInt(750); }
+    private boolean playerHasPickpocketingItems() {
+        int foodCount = APIContext.get().inventory().getCount(Constants.FoodId);
+        int necklaceCount = APIContext.get().inventory().getCount(Constants.Equipment);
+        System.out.println("Food: " + String.valueOf(foodCount) + "; Necklaces: " + String.valueOf(necklaceCount));
+        if(foodCount < NecessaryEquipment.minimumFoodCount ||
+             necklaceCount < NecessaryEquipment.minimumEquipmentCount)
+            return false;
+        return true;
+    }
 }

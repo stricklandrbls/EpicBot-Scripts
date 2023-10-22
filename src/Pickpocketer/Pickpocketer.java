@@ -1,12 +1,9 @@
 package Pickpocketer;
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.GameType;
-import com.epicbot.api.shared.model.Area;
-import com.epicbot.api.shared.model.Tile;
 import com.epicbot.api.shared.script.LoopScript;
 import com.epicbot.api.shared.script.ScriptManifest;
 import com.epicbot.api.shared.util.paint.frame.PaintFrame;
-import com.epicbot.api.shared.util.paint.frame.Seperator;
 
 import java.awt.*;
 import java.util.Random;
@@ -17,12 +14,11 @@ import Pickpocketer.Player;
 public class Pickpocketer extends LoopScript {
     Random rand = new Random();
     Player player = new Player();
-    String statusMsg = "Initiating";
+    String statusMsg = "<NONE>";
 
     @Override
     public boolean onStart(String... strings) {
-        States.Relocating.setDestination(Constants.FarmingGuildArea, States.Pickpocketing);
-        player.state = States.Organizing;
+        player.state = States.Initializing;
         return true;
     }
 
