@@ -4,6 +4,7 @@ import com.epicbot.api.shared.GameType;
 import com.epicbot.api.shared.script.LoopScript;
 import com.epicbot.api.shared.script.ScriptManifest;
 import com.epicbot.api.shared.util.paint.frame.PaintFrame;
+import com.epicbot.api.shared.util.paint.frame.Seperator;
 
 import java.awt.*;
 import java.util.Random;
@@ -31,8 +32,11 @@ public class Pickpocketer extends LoopScript {
 
     @Override
     protected void onPaint(Graphics2D g, APIContext ctx) {
-        PaintFrame frame = new PaintFrame("Test Script");
+        PaintFrame frame = new PaintFrame("Pickpocketer");
         frame.addLine("State", statusMsg);
+        frame.addLine(new Seperator(frame));
+        if(statusMsg.equals(States.Relocating.status()))
+            frame.addLine("Path[]", "[...]");
         frame.draw(g, 0, 170, ctx);
     }
 

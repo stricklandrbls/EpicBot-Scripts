@@ -10,6 +10,7 @@ import com.epicbot.api.shared.methods.IEquipmentAPI.Slot;
 import com.epicbot.api.shared.methods.ITabsAPI.Tabs;
 import com.epicbot.api.shared.model.Area;
 import com.epicbot.api.shared.model.Tile;
+import com.epicbot.api.shared.model.path.LocalPath;
 
 class States {
     public static Pickpocketing Pickpocketing = new Pickpocketing();
@@ -29,6 +30,10 @@ class DontDropTheseItems implements Predicate<Item>{
 
         String itemName = t.getName();
         for(String i : Constants.Equipment) {
+            if(i.equals(itemName))
+                return true;
+        }
+        for(String i : Constants.SpecialsToKeep) {
             if(i.equals(itemName))
                 return true;
         }
@@ -93,9 +98,6 @@ class Constants {
         APIContext.get().inventory().dropAllExcept(isWantedItem);
     }
 }
-enum PlayerEvents {
-
-}
 
 public interface PlayerState {
     public void update(Player p);
@@ -143,23 +145,28 @@ class Pickpocketing implements PlayerState {
 
 class Relocating implements PlayerState {
     protected Area destination;
+    protected Tile[] pathToDest;
     protected PlayerState stateUponArrival;
 
+    @Override
+    public void update(Player p) {
+        if(destination.contains(p.location())) {
+            p.state = stateUponArrival;
+        }
+        else {
+            pathToDest = APIContext.get().walking().findPath(this.destination.getRandomTile()).getTiles();
+            APIContext.get().walking().walkPath(pathToDest);
+            
+        }
+    }
+    
+    public int actionTime() { return 750 + Constants.rand.nextInt(750); }
     public void setDestination(Area to, PlayerState nextState) { 
         destination = to; 
         stateUponArrival = nextState;
     }
     public String status() { return "Relocating "; }
 
-    @Override
-    public void update(Player p) {
-        System.out.println(String.valueOf(p.location().getX()) + "," + String.valueOf(p.location().getY()));
-        if(destination.contains(p.location()))
-            p.state = stateUponArrival;
-        else
-            APIContext.get().walking().walkOnMap(destination.getRandomTile());
-    }
-    public int actionTime() { return 750 + Constants.rand.nextInt(750); }
 
 }
 
