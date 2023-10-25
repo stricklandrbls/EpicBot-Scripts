@@ -7,7 +7,7 @@ import ArdyKnightPickpocketer.States;
 
 public class Player {
     private APIContext ctx;
-    protected IPlayerState state;
+    protected IPlayerState state = States.Equiping;
     public Player(APIContext ctx) { 
         this.ctx = ctx; 
     }

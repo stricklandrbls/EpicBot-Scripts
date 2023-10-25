@@ -24,7 +24,6 @@ public class Script extends LoopScript{
     @Override
     public boolean onStart(String... arg0) {
         System.out.println("Starting");
-        player.DEBUG_setBankingState();
         return true;
     }
     

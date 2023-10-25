@@ -11,15 +11,15 @@ public class HealingState implements IPlayerState{
     @Override
     public void update(Player p) {
         if(!APIContext.get().inventory().contains(Constants.FoodId)) {
-            States.Banking.addWithdrawAction(new BankAction(Constants.FoodId, 20));
+            States.Banking.addWithdrawAction(new BankAction(Constants.FoodStr, 20));
             p.state = States.Banking;
             return;
         }
         if(p.health() < healthyPercent)
             APIContext.get().inventory().interactItem("Eat", Constants.FoodId);
         else
-            p.state = States.Pickpocketing;
+            p.state = States.Stealing;
     }
     public String status() { return "Eating"; }
-    public int actionTime() { return 1750 + Constants.rand.nextInt(750); }
+    public int actionTime() { return 1750 + Constants.random.nextInt(750); }
 }
