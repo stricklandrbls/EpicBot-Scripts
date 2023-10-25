@@ -10,9 +10,16 @@ import java.awt.*;
 import java.util.Random;
 
 import Pickpocketer.Player;
+import Pickpocketer.PlayerState.BankingState;
 
-@ScriptManifest(name = "Pockpicketer", gameType = GameType.OS)
+enum Program {
+    ARDYKNIGHT,
+    MSTRFARMER
+}
+
+@ScriptManifest(name = "Pickpocketer", gameType = GameType.OS)
 public class Pickpocketer extends LoopScript {
+    Program pickpocketProgram;
     Random rand = new Random();
     Player player = new Player();
     String statusMsg = "<NONE>";
@@ -26,33 +33,20 @@ public class Pickpocketer extends LoopScript {
     @Override
     protected int loop() {
         statusMsg = player.update();
-        moveScreen();
         return player.state.actionTime();
     }
 
     @Override
     protected void onPaint(Graphics2D g, APIContext ctx) {
-        PaintFrame frame = new PaintFrame("Pickpocketer");
+        String frameTitle = (pickpocketProgram.equals(Program.ARDYKNIGHT))
+            ? "Ardy Knight Pickpocketer"
+            : "Master Farmer Pickpocketer";
+
+        PaintFrame frame = new PaintFrame(frameTitle);
         frame.addLine("State", statusMsg);
         frame.addLine(new Seperator(frame));
         if(statusMsg.equals(States.Relocating.status()))
             frame.addLine("Path[]", "[...]");
         frame.draw(g, 0, 170, ctx);
-    }
-
-    protected void moveMouse() {
-        switch(rand.nextInt(10)) {
-
-        }
-    }
-    protected void moveScreen() {
-        switch(rand.nextInt(30)) {
-            case 10:
-                APIContext.get().camera().setPitch(80+rand.nextInt(15));
-                break;
-            case 20:
-                APIContext.get().camera().setYaw(rand.nextInt(2050));
-                break;
-        }
     }
 }

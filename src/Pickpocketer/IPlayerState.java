@@ -99,13 +99,13 @@ class Constants {
     }
 }
 
-public interface PlayerState {
+public interface IPlayerState {
     public void update(Player p);
     public String status();
     public int actionTime();
 }
 
-class Pickpocketing implements PlayerState {
+class Pickpocketing implements IPlayerState {
     Area targetArea;
     private static NPC target;
     @Override
@@ -143,10 +143,10 @@ class Pickpocketing implements PlayerState {
     public int actionTime() { return 250 + Constants.rand.nextInt(521); }
 }
 
-class Relocating implements PlayerState {
+class Relocating implements IPlayerState {
     protected Area destination;
     protected Tile[] pathToDest;
-    protected PlayerState stateUponArrival;
+    protected IPlayerState stateUponArrival;
 
     @Override
     public void update(Player p) {
@@ -161,7 +161,7 @@ class Relocating implements PlayerState {
     }
     
     public int actionTime() { return 750 + Constants.rand.nextInt(750); }
-    public void setDestination(Area to, PlayerState nextState) { 
+    public void setDestination(Area to, IPlayerState nextState) { 
         destination = to; 
         stateUponArrival = nextState;
     }
@@ -170,7 +170,7 @@ class Relocating implements PlayerState {
 
 }
 
-class Eating implements PlayerState {
+class Eating implements IPlayerState {
     private int healthyPercent = 95;
     @Override
     public void update(Player p) {
@@ -191,7 +191,7 @@ class Eating implements PlayerState {
 
 }
 
-class Stunned implements PlayerState {
+class Stunned implements IPlayerState {
 
     @Override
     public void update(Player p) {
@@ -231,7 +231,7 @@ class Stunned implements PlayerState {
 
 }
 
-class Banking implements PlayerState {
+class Banking implements IPlayerState {
     @Override
     public void update(Player p) {
         if(!APIContext.get().bank().isOpen())
@@ -262,7 +262,7 @@ class Banking implements PlayerState {
 
 }
 
-class EquipingItems implements PlayerState {
+class EquipingItems implements IPlayerState {
 
     @Override
     public void update(Player p) {
@@ -285,7 +285,7 @@ class EquipingItems implements PlayerState {
 
 }
 
-class Organizing implements PlayerState {
+class Organizing implements IPlayerState {
 
     @Override
     public void update(Player p) {
@@ -303,7 +303,7 @@ class Organizing implements PlayerState {
 
 }
 
-class Initializing implements PlayerState {
+class Initializing implements IPlayerState {
 
     @Override
     public void update(Player p) {

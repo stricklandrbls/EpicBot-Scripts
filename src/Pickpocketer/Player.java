@@ -4,11 +4,11 @@ import com.epicbot.api.shared.entity.NPC;
 import com.epicbot.api.shared.methods.ILocalPlayerAPI;
 import com.epicbot.api.shared.model.Tile;
 
-import Pickpocketer.PlayerState;
+import Pickpocketer.IPlayerState;
 
 public class Player {
 
-    protected PlayerState state;
+    protected IPlayerState state;
     protected String statusMsg = "Initialializing";
 
     public int health() { return APIContext.get().localPlayer().getHealthPercent(); }
@@ -22,3 +22,4 @@ public class Player {
         return APIContext.get().localPlayer().getInteracting() == target;
     }
 }
+
