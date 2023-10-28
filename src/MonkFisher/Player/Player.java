@@ -1,13 +1,14 @@
-package ArdyKnightPickpocketer.Player;
+package MonkFisher.Player;
 
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.model.Tile;
 
-import ArdyKnightPickpocketer.States;
+import MonkFisher.Constants;
+import MonkFisher.Player.States;
 
 public class Player {
     private APIContext ctx;
-    protected IPlayerState state = States.Equiping;
+    protected IPlayerState state = States.Fishing;
     public Player(APIContext ctx) { 
         this.ctx = ctx; 
     }
@@ -27,8 +28,7 @@ public class Player {
     
     public void DEBUG_setBankingState() { 
         System.out.println("Adding bank item list");
-        States.Banking.addWithdrawAction(new BankAction("Swordfish", 20));
-        States.Banking.addWithdrawAction(new BankAction("Dodgy necklace", 5));
+        States.Banking.addDepositAction(new BankAction(Constants.fishName, true));
         this.state = States.Banking;
     }
 }
