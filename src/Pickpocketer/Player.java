@@ -6,8 +6,8 @@ import com.epicbot.api.shared.model.Tile;
 
 import Pickpocketer.IPlayerState;
 
-public class Player {
 
+public class Player {
     protected IPlayerState state;
     protected String statusMsg = "Initialializing";
 

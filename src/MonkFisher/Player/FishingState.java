@@ -27,23 +27,22 @@ public class FishingState implements IPlayerState{
                 shakeCamera();
             return;
         }
+        
+        Area myGeneralArea = new Area(APIContext.get().localPlayer().getLocation(), 8);
+        LocatableEntityQueryResult<NPC> npcs = APIContext.get().npcs().query().id(Constants.fishingSpot).located(myGeneralArea.getTiles()).results();
+        if( npcs != null )
+            this.target = npcs.first();
+        else {
+            this.currentFishingSpot = this.currentFishingSpot % Constants.FishingAreas.length;
+            States.Relocating.destination = Constants.FishingAreas[this.currentFishingSpot];
+            States.Relocating.stateUponArrival = States.Fishing;
+            System.out.println("Moving to FishingSpot #" + String.valueOf(currentFishingSpot));
+            p.state = States.Relocating;
+            return;
+        }
+        this.target = APIContext.get().npcs().query().id(Constants.fishingSpot).results().nearest();
+        System.out.println("target distance: " + String.valueOf(target.distanceTo(APIContext.get())));
 
-        // if(target == null) {
-            Area myGeneralArea = new Area(APIContext.get().localPlayer().getLocation(), 8);
-            LocatableEntityQueryResult<NPC> npcs = APIContext.get().npcs().query().id(Constants.fishingSpot).located(myGeneralArea.getTiles()).results();
-            if( npcs != null )
-                this.target = npcs.first();
-            else {
-                this.currentFishingSpot = this.currentFishingSpot % Constants.FishingAreas.length;
-                States.Relocating.destination = Constants.FishingAreas[this.currentFishingSpot];
-                States.Relocating.stateUponArrival = States.Fishing;
-                System.out.println("Moving to FishingSpot #" + String.valueOf(currentFishingSpot));
-                p.state = States.Relocating;
-                return;
-            }
-            this.target = APIContext.get().npcs().query().id(Constants.fishingSpot).results().nearest();
-            System.out.println("target distance: " + String.valueOf(target.distanceTo(APIContext.get())));
-        // }
         if(Constants.random.nextInt(3) == 0)
             APIContext.get().camera().turnTo(target);
         this.target.interact(Constants.fishAction);
