@@ -5,6 +5,7 @@ import com.epicbot.api.shared.entity.NPC;
 import com.epicbot.api.shared.model.Area;
 import com.epicbot.api.shared.query.result.LocatableEntityQueryResult;
 
+import AntiBan.AntiBan;
 import MonkFisher.Player.Player;
 import MonkFisher.Player.Player.IPlayerState;
 import MonkFisher.Constants;
@@ -13,6 +14,8 @@ public class FishingState implements IPlayerState{
     NPC target;
     public int currentFishingSpot = 0;
     private static int fishCaught = 0;
+
+    // private AntiBan AntiBan = new AntiBan();
     @Override
     public void update(Player p) {
         if(APIContext.get().inventory().isFull()) {
@@ -25,6 +28,8 @@ public class FishingState implements IPlayerState{
             int x = Constants.random.nextInt(25);
             if(x % 7 == 0)
                 shakeCamera();
+            // if(x % 8 == 0)
+                // AntiBan.checksStats();
             return;
         }
         

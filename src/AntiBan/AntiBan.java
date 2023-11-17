@@ -17,10 +17,10 @@ public class AntiBan {
 
     public Random random = new Random();
 
-    public AntiBan(APIContext api) {
-        this.camera = api.camera();
-        this.tabs = api.tabs();
-        this.mouse = api.mouse();
+    public AntiBan() {
+        this.camera = APIContext.get().camera();
+        this.tabs = APIContext.get().tabs();
+        this.mouse = APIContext.get().mouse();
     }
     
     public void shakeCamera() {
@@ -37,9 +37,15 @@ public class AntiBan {
     }
 
     public void checksStats() {
-        this.tabs.open(Tabs.SKILLS);
+        if(this.tabs.getCurrent() != Tabs.SKILLS)
+            this.tabs.open(Tabs.SKILLS);
+        else
+            checkInv();
     }
     public void checkInv() {
-        this.tabs.open(Tabs.INVENTORY);
+        if(this.tabs.getCurrent() != Tabs.INVENTORY)
+            this.tabs.open(Tabs.INVENTORY);
+        else
+            checksStats();
     }
 }
