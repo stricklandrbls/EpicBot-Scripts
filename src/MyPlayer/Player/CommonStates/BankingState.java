@@ -21,25 +21,28 @@ public class BankingState implements IPlayerState {
     private boolean _depositInventory = false;
     @Override
     public IPlayerState update() {
-        
+        System.out.println("dump inv? " + String.valueOf(this._depositInventory));
+
         if(!APIContext.get().bank().isOpen())
             APIContext.get().bank().open();
-        
-        if(this._depositActions > 0) {
-            if(this._depositInventory)
-                APIContext.get().bank().depositInventory();
-            else {
-                for(int i = 0; i < this._depositActions; i++) {
-                    if(this._deposits[i].all())
-                        APIContext.get().bank().depositAll(this._deposits[i].what());
-                    else
-                        APIContext.get().bank().deposit(this._deposits[i].amount(), this._deposits[i].what());
-                }                 
-            }
-
+    
+        if(this._depositInventory){
+            APIContext.get().bank().depositInventory();
             this._depositActions = 0;
             this._depositInventory = false;
-            return this;        
+        }
+            
+
+        if(this._depositActions > 0) {
+            for(int i = 0; i < this._depositActions; i++) {
+                if(this._deposits[i].all())
+                    APIContext.get().bank().depositAll(this._deposits[i].what());
+                else
+                    APIContext.get().bank().deposit(this._deposits[i].amount(), this._deposits[i].what());
+            this._depositActions = 0;
+        }                 
+
+        return this;
         }
 
         for(int i = 0; i < this._withdrawActions; i++) {
@@ -71,7 +74,7 @@ public class BankingState implements IPlayerState {
     }
 
     public void stateAfterBanking(IPlayerState state) {
-
+        this.stateAfterBanking = state;
     }
 
     public void stateAfterBanking(IPlayerState state, Area relocateTo) {

@@ -10,7 +10,7 @@ import MyPlayer.Player.CommonStates.BankAction;
 public class CookingState implements IPlayerState {
     private String cooker;
     private String itemToCook;
-    private String cookedItem = "Monkfish";
+    private String cookedItem = "Tuna";
     private static String statusMsg = "";
 
 
@@ -21,7 +21,7 @@ public class CookingState implements IPlayerState {
     private boolean actionInitiated = false;
     private int actionTimeoutMax = 10;
     private int actionTimeoutCount = 0;
-    private int actionTime = 2345;
+    private int actionTime = 500;
 
     public CookingState(
         String cookerItemName,
@@ -50,6 +50,7 @@ public class CookingState implements IPlayerState {
                 if(!hasStartedCooking()){
                     CookingState.statusMsg = "Menu Open";
                     cookingMenuWidget().click();
+                    APIContext.get().mouse().moveOffScreen();
                     return this;
                 }
             }            
