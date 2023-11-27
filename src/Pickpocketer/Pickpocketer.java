@@ -36,17 +36,17 @@ public class Pickpocketer extends LoopScript {
         return player.state.actionTime();
     }
 
-    @Override
-    protected void onPaint(Graphics2D g, APIContext ctx) {
-        String frameTitle = (pickpocketProgram.equals(Program.ARDYKNIGHT))
-            ? "Ardy Knight Pickpocketer"
-            : "Master Farmer Pickpocketer";
+    // @Override
+    // protected void onPaint(Graphics2D g, APIContext ctx) {
+    //     String frameTitle = (pickpocketProgram.equals(Program.ARDYKNIGHT))
+    //         ? "Ardy Knight Pickpocketer"
+    //         : "Master Farmer Pickpocketer";
 
-        PaintFrame frame = new PaintFrame(frameTitle);
-        frame.addLine("State", statusMsg);
-        frame.addLine(new Seperator(frame));
-        if(statusMsg.equals(States.Relocating.status()))
-            frame.addLine("Path[]", "[...]");
-        frame.draw(g, 0, 170, ctx);
-    }
+    //     PaintFrame frame = new PaintFrame(frameTitle);
+    //     frame.addLine("State", statusMsg);
+    //     frame.addLine(new Seperator(frame));
+    //     if(statusMsg.equals(States.Relocating.status()))
+    //         frame.addLine("Path[]", "[...]");
+    //     frame.draw(g, 0, 170, ctx);
+    // }
 }

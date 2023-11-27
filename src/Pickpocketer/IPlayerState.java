@@ -175,6 +175,7 @@ class Eating implements IPlayerState {
     @Override
     public void update(Player p) {
         if(!APIContext.get().inventory().contains(Constants.FoodId)) {
+            APIContext.get().script().stop(null);
             States.Relocating.destination = Constants.FarmingGuildBank;
             States.Relocating.stateUponArrival = States.Banking;
             Constants.dropUnwantedSeeds();
@@ -266,13 +267,14 @@ class EquipingItems implements IPlayerState {
 
     @Override
     public void update(Player p) {
-        if(!APIContext.get().inventory().contains(Constants.Equipment)) {
-            States.Relocating.destination = Constants.FarmingGuildBank;
-            States.Relocating.stateUponArrival = States.Banking;
-            p.state = States.Relocating;
-            return;
-        }
-        if(!APIContext.get().equipment().contains(Slot.NECK, Constants.Equipment))
+        // if(!APIContext.get().inventory().contains(Constants.Equipment)) {
+        //     States.Relocating.destination = Constants.FarmingGuildBank;
+        //     States.Relocating.stateUponArrival = States.Banking;
+        //     p.state = States.Relocating;
+        //     return;
+        // }
+        if(!APIContext.get().equipment().contains(Slot.NECK, Constants.Equipment)
+            && APIContext.get().inventory().contains(Constants.Equipment))
             APIContext.get().inventory().getItem(Constants.Equipment).interact("Wear");
         p.state = States.Pickpocketing;
     }
