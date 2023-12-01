@@ -23,7 +23,7 @@ class BankAction {
 }
 public class BankingState implements IPlayerState {
 
-    private BankAction[] _deposits = { new BankAction(Constants.fishName, true)};
+    private BankAction[] _deposits = { new BankAction(Constants.Shark.name(), true)};
     private int _depositActions = 1;
 
     @Override
@@ -31,11 +31,11 @@ public class BankingState implements IPlayerState {
         if(!APIContext.get().bank().isOpen())
             APIContext.get().bank().open();
 
-        APIContext.get().bank().depositAll(Constants.fishName);
+        APIContext.get().bank().depositAll(Constants.Shark.name());
 
         APIContext.get().bank().close();
 
-        if(APIContext.get().inventory().contains(Constants.fishName))
+        if(APIContext.get().inventory().contains(Constants.Shark.name()))
             throw new UnsupportedOperationException("Inventory is still full");
             
         States.Relocating.destination = Constants.FishingAreas[States.Fishing.currentFishingSpot];

@@ -11,7 +11,7 @@ import com.epicbot.api.shared.util.paint.frame.Seperator;
 
 import MonkFisher.Player.Player;
 
-@ScriptManifest(name = "MonkFisher", gameType = GameType.OS)
+@ScriptManifest(name = "Fisher", gameType = GameType.OS)
 public class Script extends LoopScript{
     
     protected Player player = new Player(APIContext.get());
@@ -29,7 +29,7 @@ public class Script extends LoopScript{
 
     @Override
     protected void onPaint(Graphics2D g, APIContext ctx) {
-        PaintFrame frame = new PaintFrame("MonkFisher");
+        PaintFrame frame = new PaintFrame("Fisher");
         frame.addLine("State", player.status());
         frame.addLine(new Seperator(frame));
         frame.draw(g, 0, 170, ctx);
