@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.GameType;
+import com.epicbot.api.shared.model.Tile;
+import com.epicbot.api.shared.model.path.LocalPath;
 import com.epicbot.api.shared.script.LoopScript;
 import com.epicbot.api.shared.script.ScriptManifest;
 import com.epicbot.api.shared.util.paint.frame.PaintFrame;
@@ -23,6 +25,19 @@ public class Script extends LoopScript{
 
     @Override
     public boolean onStart(String... arg0) {
+        // boolean canReach = Constants.CatherbyBankArea.getRandomTile().canReach(getAPIContext());
+        // System.out.println("canReach: "+ canReach);
+        // LocalPath path = APIContext.get().walking().findPath(Constants.CatherbyBankArea.getRandomTile());
+        // if(path == null)
+        //     path = APIContext.get().walking().findPath(Constants.CatherbyMidPoint.getRandomTile());
+        // if(path == null)
+        //     System.out.println("All Paths is null");
+        // else {
+        //     for(Tile tile : path.getTiles()) {
+        //         System.out.println("Tile { x: "+String.valueOf(tile.getX()) +", y: "+String.valueOf(tile.getY())+"}");
+        //     }
+        // }
+            
         return true;
     }
     
