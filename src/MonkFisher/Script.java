@@ -25,29 +25,8 @@ public class Script extends LoopScript{
 
     @Override
     public boolean onStart(String... arg0) {
-        boolean canReach = Constants.CatherbyFishingAreas[0].getRandomTile().canReach(getAPIContext());
-        System.out.println("canReach: "+ canReach);
-        if(!canReach) {
-            System.out.println("Attempting to get closest Tile");
-            Tile closest = APIContext.get().walking().getClosestTileOnScreen(Constants.CatherbyFishingAreas[0].getRandomTile());
-            if(closest != null){
-                System.out.println("\t => Closest Tile {"+closest.getX()+", "+closest.getY()+"}");
-                Tile[] path = APIContext.get().walking().findPath(closest).getTiles();
-                APIContext.get().walking().walkPath(path);
-            }
-        }
-        // LocalPath path = APIContext.get().walking().findPath(Constants.CatherbyBankArea.getRandomTile());
-        // if(path == null)
-        //     path = APIContext.get().walking().findPath(Constants.CatherbyMidPoint.getRandomTile());
-        // if(path == null)
-        //     System.out.println("All Paths is null");
-        // else {
-        //     for(Tile tile : path.getTiles()) {
-        //         System.out.println("Tile { x: "+String.valueOf(tile.getX()) +", y: "+String.valueOf(tile.getY())+"}");
-        //     }
-        // }
             
-        return false;
+        return true;
     }
     
 

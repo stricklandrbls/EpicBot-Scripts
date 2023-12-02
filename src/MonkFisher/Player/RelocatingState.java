@@ -10,6 +10,7 @@ import MonkFisher.Player.Player.IPlayerState;
 
 public class RelocatingState implements IPlayerState {
     protected Area destination;
+    public Tile destinationTile;
     protected Tile[] pathToDest;
     protected IPlayerState stateUponArrival;
 
@@ -19,11 +20,9 @@ public class RelocatingState implements IPlayerState {
             p.state = stateUponArrival;
         }
         else {
-            destination.walkTo();
             pathToDest = APIContext.get().walking().findPath(this.destination.getRandomTile()).getTiles();
             APIContext.get().walking().walkPath(pathToDest);
         }
-        Tile closest = APIContext.get().walking().getClosestTileOnMap(this.destination.getRandomTile());
     }
     
     public int actionTime() { return 750 + Constants.random.nextInt(750); }

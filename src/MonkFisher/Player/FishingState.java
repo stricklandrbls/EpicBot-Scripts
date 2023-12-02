@@ -19,7 +19,7 @@ public class FishingState implements IPlayerState{
     @Override
     public void update(Player p) {
         if(APIContext.get().inventory().isFull()) {
-            States.Relocating.destination = Constants.CatherbyBankArea;
+            States.Relocating.destination = Constants.FishingGuildBank;
             States.Relocating.stateUponArrival = States.Banking;
             p.state = States.Relocating;
             return;
@@ -28,20 +28,16 @@ public class FishingState implements IPlayerState{
             int x = Constants.random.nextInt(25);
             if(x % 7 == 0)
                 shakeCamera();
-            // if(x % 8 == 0)
-                // AntiBan.checksStats();
             return;
         }
         
         Area myGeneralArea = new Area(APIContext.get().localPlayer().getLocation(), 8);
         LocatableEntityQueryResult<NPC> npcs = APIContext.get().npcs().query().id(Constants.Shark.equipment().fishingSpotNPCId()).located(myGeneralArea.getTiles()).results();
         if( !npcs.isEmpty() )
-            this.target = npcs.first();
+            this.target = npcs.nearest();
         else {
-            this.currentFishingSpot = this.currentFishingSpot % Constants.CatherbyFishingAreas.length;
-            States.Relocating.destination = Constants.CatherbyFishingAreas[this.currentFishingSpot];
+            States.Relocating.destination = Constants.FishingGuildFishingArea;
             States.Relocating.stateUponArrival = States.Fishing;
-            System.out.println("Moving to FishingSpot #" + String.valueOf(currentFishingSpot));
             p.state = States.Relocating;
             return;
         }

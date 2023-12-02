@@ -1,6 +1,7 @@
 package MonkFisher.Player;
 
 import com.epicbot.api.shared.APIContext;
+import com.epicbot.api.shared.model.Area;
 
 import MonkFisher.Constants;
 import MonkFisher.Player.Player.IPlayerState;
@@ -38,7 +39,7 @@ public class BankingState implements IPlayerState {
         if(APIContext.get().inventory().contains(Constants.Shark.name()))
             throw new UnsupportedOperationException("Inventory is still full");
             
-        States.Relocating.destination = Constants.FishingAreas[States.Fishing.currentFishingSpot];
+        States.Relocating.destination = new Area(Constants.FishingGuildFishingAreaTile, 1);
         States.Relocating.stateUponArrival = States.Fishing;
         p.state = States.Relocating;
     }
