@@ -20,7 +20,7 @@ public class Constants {
     public static Area FarmingGuildSeedBank = new Area(new Tile(1246, 3740, 0), 1);
     public static Area DraynorBank = new Area(new Tile(3093, 3242), 1);
     public static Random rand = new Random();
-    public static String[] Equipment = {"Dodgy necklace"};    
+    public static String[] Equipment = {"Dodgy necklace", "Rune pouch"};    
     public static String[] SeedsToKeep = {
         "Ranarr",
         "Strawberry",

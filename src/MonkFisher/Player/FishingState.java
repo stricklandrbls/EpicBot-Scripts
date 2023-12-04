@@ -19,6 +19,10 @@ public class FishingState implements IPlayerState{
     @Override
     public void update(Player p) {
         if(APIContext.get().inventory().isFull()) {
+            if(APIContext.get().bank().isReachable()) {
+                p.state = States.Banking;
+                return;
+            }
             States.Relocating.destination = Constants.FishingGuildBank;
             States.Relocating.stateUponArrival = States.Banking;
             p.state = States.Relocating;

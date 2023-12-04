@@ -16,7 +16,7 @@ public class RelocatingState implements IPlayerState {
 
     @Override
     public void update(Player p) {
-        if(destination.contains(p.location())) {
+        if(destination.contains(p.location()) || p.location().distanceTo(APIContext.get(), destination.getCentralTile()) <= 7) {
             p.state = stateUponArrival;
         }
         else {
