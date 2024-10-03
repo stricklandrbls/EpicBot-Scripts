@@ -6,8 +6,6 @@ import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.entity.ItemWidget;
 import com.epicbot.api.shared.methods.ITabsAPI.Tabs;
 import com.epicbot.api.shared.model.Spell;
-import com.epicbot.api.shared.util.paint.frame.Line;
-import com.epicbot.api.shared.util.paint.frame.PaintFrame;
 
 import lib.Player.IPlayerState.IPlayerState;
 import lib.Player.IPlayerState.StatusFrame;
@@ -15,35 +13,17 @@ import lib.antiban.AntiBan;
 import src.Alcher.Constants;
 
 public class AlchingState extends IPlayerState{
-  private PaintFrame frame_ = new PaintFrame("Alching");
-  private Line countLine = new Line(frame_, "Item Count", APIContext -> { return this.countStr_; });
-  // private Line countLine = new Line(frame_, "Item Count", this.itemCount_);
-  private class StatusLine extends Line {
-    public String value = "";
-    public StatusLine(PaintFrame frame, String txt, String value){
-      super(frame, txt, APIContext -> { return value; });
-    }
-    @Override
-    public String getValue(APIContext ctx){
-      return this.value;
-    }
-  }
-  private StatusLine statusLine_ = new StatusLine(frame_, "Item:", "None Selected");
-  private StatusLine countLine_ = new StatusLine(frame_, "Count", "");
+  private StatusFrame statusFrame_ = new StatusFrame("Alching");
   private ItemWidget  item_;
   private int         itemCount_ = 0;
-  private String      countStr_ = "";
   private boolean     spellReady_ = false;
   private int         stateTime_ = 500;
 
   public void setItem(String itemName){
     this.item_ = APIContext.get().inventory().getItem(itemName);
     this.itemCount_ = this.item_.getStackSize();
-    statusLine_.value = item_.getName();
-    countLine_.value = String.valueOf(itemCount_);
-    frame_.addPart(statusLine_);
-    frame_.addPart(countLine);
-    frame_.addPart(countLine_); // this works
+    statusFrame_.add("item", statusFrame_.new LineData("Item Selected:", item_.getName()));
+    statusFrame_.add("count", statusFrame_.new LineData("Count:", itemCount_));
   }
 
   @Override
@@ -53,8 +33,7 @@ public class AlchingState extends IPlayerState{
   public IPlayerState update() {
     if(APIContext.get().localPlayer().isAnimating()){
       this.itemCount_ = item_.getStackSize();
-      countLine_.value = String.valueOf(itemCount_);
-      // System.out.println(statusLine_.value.concat(":").concat(countLine_.value));
+      statusFrame_.update("count", itemCount_);
       APIContext.get().tabs().open(Tabs.MAGIC);
       AntiBan.mouse.CheckFigit();
       return this;
@@ -94,6 +73,6 @@ public class AlchingState extends IPlayerState{
   public void draw(Graphics2D g, APIContext ctx){
     if(item_ == null)
       return;
-    frame_.draw(g, 0, 200, ctx);
+    statusFrame_.draw(g,ctx);
   }
 }
