@@ -6,6 +6,10 @@ public class MyPlayer {
   public MyPlayer(IPlayerState initState){
     this.currentState_ = initState;
   }
+  
+  public IPlayerState currentState(){
+    return this.currentState_;
+  }
   public void setState(IPlayerState nextState){
     this.currentState_ = nextState;
   }

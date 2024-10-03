@@ -32,4 +32,9 @@ public class InitState extends IPlayerState{
     return this.statusStr_;
   }
 
+  @Override
+  public String stateName() {
+    return "Initial State";
+  }
+
 }

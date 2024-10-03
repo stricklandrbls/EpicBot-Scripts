@@ -81,5 +81,6 @@
     "/home/orion/EpicBot/dependencies/commons-compress-1.20.jar",
     "/home/orion/EpicBot/dependencies/batik-util-1.11.jar"
   ],
-  "java.project.outputPath": "bin"
+  "java.project.outputPath": "bin",
+  "java.compile.nullAnalysis.mode": "automatic"
 }

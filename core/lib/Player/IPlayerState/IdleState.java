@@ -17,4 +17,9 @@ public class IdleState extends IPlayerState{
   public String status() {
     return this.statusStr;
   }
+
+  @Override
+  public String stateName() {
+    return "Idle";
+  }
 }
