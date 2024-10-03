@@ -16,10 +16,16 @@ import src.Alcher.Constants;
 
 public class AlchingState extends IPlayerState{
   private PaintFrame frame_ = new PaintFrame("Alching");
+  private Line countLine = new Line(frame_, "Item Count", APIContext -> { return this.countStr_; });
+  // private Line countLine = new Line(frame_, "Item Count", this.itemCount_);
   private class StatusLine extends Line {
     public String value = "";
     public StatusLine(PaintFrame frame, String txt, String value){
-      super(frame, txt, value);
+      super(frame, txt, APIContext -> { return value; });
+    }
+    @Override
+    public String getValue(APIContext ctx){
+      return this.value;
     }
   }
   private StatusLine statusLine_ = new StatusLine(frame_, "Item:", "None Selected");
@@ -36,6 +42,8 @@ public class AlchingState extends IPlayerState{
     statusLine_.value = item_.getName();
     countLine_.value = String.valueOf(itemCount_);
     frame_.addPart(statusLine_);
+    frame_.addPart(countLine);
+    frame_.addPart(countLine_); // this works
   }
 
   @Override
