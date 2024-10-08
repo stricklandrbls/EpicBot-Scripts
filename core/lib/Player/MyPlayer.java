@@ -2,7 +2,9 @@ package lib.Player;
 import lib.Player.IPlayerState.*;
 
 public class MyPlayer {
+
   private IPlayerState currentState_;
+
   public MyPlayer(IPlayerState initState){
     this.currentState_ = initState;
   }
@@ -20,7 +22,7 @@ public class MyPlayer {
   public int actionTime() {
     return 1000;
   }
-
+  public IPlayerState getState(){ return currentState_; }
   public String status() {
     return this.currentState_.status();
   }

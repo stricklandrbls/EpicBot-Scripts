@@ -10,7 +10,7 @@ public abstract class IPlayerState {
   public abstract String status();
   public abstract String stateName();
   
-  protected void onEnter(){
+  public void onEnter(){
     System.out.println(this.status());
   }
   protected void onExit(){

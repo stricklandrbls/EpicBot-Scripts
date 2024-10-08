@@ -1,6 +1,6 @@
 package lib.Player.IPlayerState;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.HashMap;
 
 import com.epicbot.api.shared.APIContext;
@@ -13,6 +13,8 @@ public class StatusFrame {
 
   public StatusFrame(String title){
     frame_ = new PaintFrame(title);
+    Button testBtn = new Button("Click me");
+    frame_.addLine("", testBtn);
   }
 
   private class StatusLine extends Line {
