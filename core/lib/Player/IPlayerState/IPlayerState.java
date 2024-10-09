@@ -16,7 +16,9 @@ public abstract class IPlayerState {
   protected void onExit(){
 
   }
-
+  public boolean amIdle() {
+    return !APIContext.get().localPlayer().isAnimating();
+  }
   public void draw(Graphics2D g, APIContext ctx){
     return;
   }
