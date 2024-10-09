@@ -13,8 +13,6 @@ public class StatusFrame {
 
   public StatusFrame(String title){
     frame_ = new PaintFrame(title);
-    Button testBtn = new Button("Click me");
-    frame_.addLine("", (Button)testBtn);
   }
 
   private class StatusLine extends Line {

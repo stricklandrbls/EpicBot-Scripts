@@ -6,10 +6,15 @@ import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.entity.SceneObject;
 import com.epicbot.api.shared.entity.WidgetChild;
 
+import lib.Bank.Deposit;
+import lib.Bank.Item;
+import lib.Bank.Withdraw;
 import lib.Player.IPlayerState.IPlayerState;
+import lib.Player.IPlayerState.SharedStates;
 import lib.Player.IPlayerState.StatusFrame;
 import lib.antiban.AntiBan;
 import lib.antiban.Time.TypicalActionTime;
+import src.Smelter.Constants;
 import src.Smelter.Profiles.ISmeltingProfile;
 
 public class Smelting extends IPlayerState {
@@ -32,13 +37,18 @@ public class Smelting extends IPlayerState {
     if(!currentProfile.canMake()){
       startInitiated = false;
       uiItemSelected = false;
+
       status_.update("status", "Cannot make anymore ".concat(currentProfile.outputItem()));
-      APIContext.get().script().stop("Cannot make anymore ".concat(currentProfile.outputItem()));
+      SharedStates.Banking.nextState = this;
+      SharedStates.Banking.add(new Deposit(new Item(currentProfile.outputItem())));
+      SharedStates.Banking.add(new Withdraw(new Item("Steel bar")));
+      return SharedStates.Banking;
+      // APIContext.get().script().stop("Cannot make anymore ".concat(currentProfile.outputItem()));
     }
 
     if(startInitiated && this.amIdle() && !uiItemSelected){
       status_.update("status", "Started but idle");
-      if(!running() && !uiItemSelected){
+      if(!ready() && !uiItemSelected){
         if(APIContext.get().localPlayer().isMoving()){
           return this;
         }
@@ -48,7 +58,7 @@ public class Smelting extends IPlayerState {
       }
       return this;
     }
-    if(running()){
+    if(ready()){
       actionTime_ = 6000;
       status_.update("status", "Running");
       return this;
@@ -61,7 +71,7 @@ public class Smelting extends IPlayerState {
     }
     if(furnace.canReach(APIContext.get()) && !startInitiated){
       status_.update("status", "Going to furnace");
-      APIContext.get().camera().turnTo(furnace.getLocation());
+      // APIContext.get().camera().turnTo(furnace.getLocation());
       furnace.click();
       startInitiated = true;
     }
@@ -82,7 +92,7 @@ public class Smelting extends IPlayerState {
     status_.add("profile", status_.new LineData("Profile Selected", currentProfile.outputItem()));
     status_.add("status", status_.new LineData("Status:", "Init..."));
   }
-  private boolean running(){
+  private boolean ready(){
     return APIContext.get().inventory().getCount(currentProfile.reagents()) < currentProfile.maxReagents();
   }
   private void selectFromUI(){
