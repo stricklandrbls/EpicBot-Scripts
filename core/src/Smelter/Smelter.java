@@ -7,12 +7,11 @@ import com.epicbot.api.shared.GameType;
 import com.epicbot.api.shared.script.LoopScript;
 import com.epicbot.api.shared.script.ScriptManifest;
 
-import lib.Bank.Item;
 import lib.Bank.Withdraw;
 import lib.Player.MyPlayer;
 import lib.Player.IPlayerState.SharedStates;
 
-@ScriptManifest(name = "Edgeville Smelter", gameType = GameType.OS)
+@ScriptManifest(name = "Neitiznot Smelter", gameType = GameType.OS)
 public class Smelter extends LoopScript {
   MyPlayer player;
   
@@ -24,11 +23,12 @@ public class Smelter extends LoopScript {
 
   @Override
   public boolean onStart(String... arg0) {
+    SharedStates.Banking.withdrawsFirst_ = false;
     Constants.SmeltingState.setProfile(Constants.Cannonball);
     if(!APIContext.get().inventory().contains(item -> {
       return item.getName().equals("Steel bar");
     })){
-      SharedStates.Banking.add(new Withdraw(new Item("Steel bar")));
+      SharedStates.Banking.add(new Withdraw("Steel bar"));
       SharedStates.Banking.nextState = Constants.SmeltingState;
       player = new MyPlayer(SharedStates.Banking);
       return true;

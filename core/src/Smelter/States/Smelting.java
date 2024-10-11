@@ -7,7 +7,6 @@ import com.epicbot.api.shared.entity.SceneObject;
 import com.epicbot.api.shared.entity.WidgetChild;
 
 import lib.Bank.Deposit;
-import lib.Bank.Item;
 import lib.Bank.Withdraw;
 import lib.Player.IPlayerState.IPlayerState;
 import lib.Player.IPlayerState.SharedStates;
@@ -40,8 +39,8 @@ public class Smelting extends IPlayerState {
 
       status_.update("status", "Cannot make anymore ".concat(currentProfile.outputItem()));
       SharedStates.Banking.nextState = this;
-      SharedStates.Banking.add(new Deposit(new Item(currentProfile.outputItem())));
-      SharedStates.Banking.add(new Withdraw(new Item("Steel bar")));
+      SharedStates.Banking.add(new Deposit(currentProfile.outputItem()));
+      SharedStates.Banking.add(new Withdraw("Steel bar"));
       return SharedStates.Banking;
       // APIContext.get().script().stop("Cannot make anymore ".concat(currentProfile.outputItem()));
     }
