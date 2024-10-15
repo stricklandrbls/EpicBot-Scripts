@@ -6,6 +6,8 @@ import com.epicbot.api.shared.util.paint.frame.FramePart;
 
 import javafx.scene.shape.Rectangle;
 import lib.Player.IPlayerState.IPlayerState;
+import lib.Player.IPlayerState.SharedStates;
+import lib.Script.StatusFrame.ButtonCallback;
 import lib.Script.StatusFrame.FrameButton;
 import lib.Script.StatusFrame.StatusFrame;
 
@@ -13,13 +15,26 @@ import java.awt.*;
 import java.lang.*;
 public class StatusFrameTestState extends IPlayerState {
   StatusFrame status_ = new StatusFrame("Test Frame");
-  
+  FrameButton btn;
+  public class ChangeState implements ButtonCallback{
+
+    @Override
+    public void execute() {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    }
+
+  }
   private boolean firstEnter = true;
+  public IPlayerState nextState = SharedStates.Idling;
   @Override
   public void onEnter(){
     
     status_.add("txt", status_.new LineData("Text: ", "Some Text"));
-    FrameButton btn = new FrameButton(status_, "Click Me!");
+    btn = new FrameButton(status_, "Click Me!");
+    btn.onSelect(() -> {
+      this.next = nextState;
+    });
     status_.getFrame().addPart(btn);
     firstEnter = false;
   }
@@ -38,7 +53,7 @@ public class StatusFrameTestState extends IPlayerState {
 
 
 
-
+  private IPlayerState next = this;
   @Override
   public IPlayerState update() {
 
@@ -52,11 +67,11 @@ public class StatusFrameTestState extends IPlayerState {
       .concat(String.valueOf(status_.getFrame().getLastBounds().getWidth()))
       .concat("w");
     // System.out.println(status);
-    return this;
+    return next;
   }
 
   @Override
-  public int actionTime() { return 2000; }
+  public int actionTime() { return 200; }
 
   @Override
   public String status() {

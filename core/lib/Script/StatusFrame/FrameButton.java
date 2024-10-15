@@ -13,6 +13,7 @@ import com.epicbot.api.shared.util.paint.frame.FramePart;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.util.function.Function;
 
 // public class CustomPaintFrame {
 //     private Rectangle2D rect;
@@ -113,7 +114,8 @@ public class FrameButton extends FramePart {
     }
     if(isHovered()){
       if(fillPercentage >= Width){
-        System.out.println("Button was selected!");
+        isSelected_ = true;
+        this.onSelect.run();
         g.setColor(Color.WHITE);
         g.drawLine(lineX1, lineY, lineX2, lineY);
       }
@@ -145,7 +147,14 @@ public class FrameButton extends FramePart {
   public Dimension2D getSize(Graphics2D arg0, APIContext arg1) {
     return dims;
   }
-  
+  private Runnable onSelect;
+  public void onSelect(Runnable onSelect){
+    this.onSelect = onSelect;
+  }
+  private boolean isSelected_ = false;
+  public boolean isSelected(){
+    return isSelected_;
+  }
 }
 // Frame frame = new Frame("Mouse Position Example");
 // frame.setSize(400, 400);
