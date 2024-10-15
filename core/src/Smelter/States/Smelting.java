@@ -10,7 +10,7 @@ import lib.Bank.Deposit;
 import lib.Bank.Withdraw;
 import lib.Player.IPlayerState.IPlayerState;
 import lib.Player.IPlayerState.SharedStates;
-import lib.Player.IPlayerState.StatusFrame;
+import lib.Script.StatusFrame.StatusFrame;
 import lib.antiban.AntiBan;
 import lib.antiban.Time.TypicalActionTime;
 import src.Smelter.Constants;

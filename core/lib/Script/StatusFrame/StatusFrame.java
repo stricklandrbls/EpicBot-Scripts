@@ -1,20 +1,29 @@
-package lib.Player.IPlayerState;
+package lib.Script.StatusFrame;
 
 import java.awt.*;
 import java.util.HashMap;
 
 import com.epicbot.api.shared.APIContext;
+import com.epicbot.api.shared.util.paint.Dimension2D;
 import com.epicbot.api.shared.util.paint.frame.Line;
 import com.epicbot.api.shared.util.paint.frame.PaintFrame;
 
 public class StatusFrame {
   PaintFrame frame_;
+  public Graphics2D g;
+  public APIContext ctx;
   private HashMap<String, StatusLine> lines = new HashMap<String, StatusLine>();
-
+  private Dimension2D freeArea; 
   public StatusFrame(String title){
     frame_ = new PaintFrame(title);
+    
   }
-
+  public Dimension2D availableSpace(){
+    int x = (int)frame_.getLastBounds().getX();
+    int y = (int)frame_.getLastBounds().getY();
+    return new Dimension2D(x, y);
+  }
+  public PaintFrame getFrame(){ return frame_; }
   private class StatusLine extends Line {
     public String value = "";
     public StatusLine(PaintFrame frame, String txt, Object value){
@@ -57,6 +66,7 @@ public class StatusFrame {
     txt.value = String.valueOf(value);
   }
   public void draw(Graphics2D g, APIContext ctx){
-    frame_.draw(g, 0, 200, ctx);
+    
+    frame_.draw(g, 50, 200, ctx);
   }
 }

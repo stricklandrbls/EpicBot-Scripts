@@ -8,12 +8,12 @@ import com.epicbot.api.shared.methods.ITabsAPI.Tabs;
 import com.epicbot.api.shared.model.Spell;
 
 import lib.Player.IPlayerState.IPlayerState;
-import lib.Player.IPlayerState.StatusFrame;
+import lib.Script.StatusFrame.StatusFrame;
 import lib.antiban.AntiBan;
 import src.Alcher.Constants;
 
 public class AlchingState extends IPlayerState{
-  private StatusFrame statusFrame_ = new StatusFrame("Alching");
+  private StatusFrame statusFrame_= new StatusFrame("Alching");
   private ItemWidget  item_;
   private int         itemCount_ = 0;
   private boolean     spellReady_ = false;
