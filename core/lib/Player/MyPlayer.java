@@ -4,7 +4,7 @@ import lib.Player.IPlayerState.*;
 public class MyPlayer {
 
   private IPlayerState currentState_;
-
+  
   public MyPlayer(IPlayerState initState){
     this.currentState_ = initState;
   }

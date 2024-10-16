@@ -6,7 +6,8 @@ import com.epicbot.api.shared.script.LoopScript;
 import com.epicbot.api.shared.script.ScriptManifest;
 
 import lib.Player.MyPlayer;
-import src.Tester.StatusFrameTests.States.StatusFrameTestState;
+import lib.Player.IPlayerState.IPlayerState;
+import src.Tester.StatusFrameTests.States.Constants;
 
 import java.awt.*;
 
@@ -15,15 +16,13 @@ public class StateFrameTests extends LoopScript {
   MyPlayer player;
   @Override
   protected int loop() {
-    // System.out.println("Running loop()");
     player.update();
     return player.actionTime();
   }
 
   @Override
   public boolean onStart(String... arg0) {
-    player = new MyPlayer(new StatusFrameTestState());
-    // System.out.println("Exiting onStart");
+    player = new MyPlayer(IPlayerState.Enter(Constants.Init));
     return true;
   }
   

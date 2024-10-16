@@ -1,26 +1,51 @@
 package src.Alcher.States;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.entity.ItemWidget;
 
 import lib.Player.IPlayerState.IPlayerState;
+import lib.Script.StatusFrame.FrameButton;
+import lib.Script.StatusFrame.StatusFrame;
 import src.Alcher.Constants;
 
 public class InitState extends IPlayerState{
-
   private String statusStr_ = "Awaiting Item Selection";
-  private ItemWidget selectedItem_;
   @Override
-  public IPlayerState update() {
-    ItemWidget selectedItem = APIContext.get().inventory().getSelectedItem();
-    if(selectedItem != null) {
-      statusStr_ = "Item was selected: ".concat(selectedItem.getName());
-      Constants.Alching.setItem(selectedItem.getName());
-      APIContext.get().inventory().deselectItem();
-      return Constants.Alching;
+  public void onEnter(){
+    this.status = new StatusFrame("Unique Items");
+    this.status.add("item", this.status.new LineData("Item Selected: ", "None"));
+    List<ItemWidget> alchables = APIContext.get().inventory().getItems();
+    ArrayList<String> uniques = new ArrayList<String>();
+    
+    for(ItemWidget item : alchables){
+      if(!uniques.contains(item.getName())){
+        uniques.add(item.getName());
+
+        status.add(
+          new FrameButton(status, item.getName(), () -> {
+            this.updateStrategy = () -> { 
+              Constants.Alching.setItem(item.getName());
+              return IPlayerState.Enter(Constants.Alching); 
+            };
+          })
+        );
+      }
     }
-    return this;
   }
+  // @Override
+  // public IPlayerState update() {
+  //   ItemWidget selectedItem = APIContext.get().inventory().getSelectedItem();
+  //   if(selectedItem != null) {
+  //     statusStr_ = "Item was selected: ".concat(selectedItem.getName());
+  //     Constants.Alching.setItem(selectedItem.getName());
+  //     APIContext.get().inventory().deselectItem();
+  //     return Constants.Alching;
+  //   }
+  //   return this;
+  // }
 
   @Override
   public int actionTime() {
