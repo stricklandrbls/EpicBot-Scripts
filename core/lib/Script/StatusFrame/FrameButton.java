@@ -16,12 +16,16 @@ public class FrameButton extends FramePart {
   public Color slctColor = Color.LIGHT_GRAY;
   private String text = "";
   private int hoverTime = 1;
-  private Dimension2D dims = new Dimension2D(150.0, 30.0);
+  private Dimension2D dims = new Dimension2D(Width, Height + SelectLinePad + 5);
   public FrameButton(StatusFrame statusFrame, String text){
     super(statusFrame.getFrame());
     this.text = text;
-    statusFrame.getFrame().addPart(this);
     
+  }
+  public FrameButton(StatusFrame statusFrame, String text, Runnable onSelect){
+    super(statusFrame.getFrame());
+    this.text = text;
+    this.onSelect = onSelect;
   }
   public boolean isHovered(){
     Point mousePos = APIContext.get().mouse().getLocation();

@@ -58,12 +58,16 @@ public class StatusFrame {
     lines.put(id, newLine);
     frame_.addPart(newLine);
   }
+  public void add(FrameButton btn){
+    frame_.addPart(btn);
+  }
   public void update(String id, Object value){
     StatusLine txt = lines.get(id);
     if(txt == null)
       return;
     txt.value = String.valueOf(value);
   }
+  
   public void draw(Graphics2D g, APIContext ctx){
     
     frame_.draw(g, 50, 100, ctx);
