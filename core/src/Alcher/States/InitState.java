@@ -35,17 +35,6 @@ public class InitState extends IPlayerState{
       }
     }
   }
-  // @Override
-  // public IPlayerState update() {
-  //   ItemWidget selectedItem = APIContext.get().inventory().getSelectedItem();
-  //   if(selectedItem != null) {
-  //     statusStr_ = "Item was selected: ".concat(selectedItem.getName());
-  //     Constants.Alching.setItem(selectedItem.getName());
-  //     APIContext.get().inventory().deselectItem();
-  //     return Constants.Alching;
-  //   }
-  //   return this;
-  // }
 
   @Override
   public int actionTime() {
