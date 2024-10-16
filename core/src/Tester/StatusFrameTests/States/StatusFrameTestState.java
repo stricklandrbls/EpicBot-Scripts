@@ -2,9 +2,8 @@ package src.Tester.StatusFrameTests.States;
 
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.util.paint.Dimension2D;
-import com.epicbot.api.shared.util.paint.frame.FramePart;
+import com.epicbot.api.shared.util.paint.frame.*;
 
-import javafx.scene.shape.Rectangle;
 import lib.Player.IPlayerState.IPlayerState;
 import lib.Player.IPlayerState.SharedStates;
 import lib.Script.StatusFrame.ButtonCallback;
@@ -16,26 +15,30 @@ import java.lang.*;
 public class StatusFrameTestState extends IPlayerState {
   StatusFrame status_ = new StatusFrame("Test Frame");
   FrameButton btn;
-  public class ChangeState implements ButtonCallback{
-
-    @Override
-    public void execute() {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'execute'");
-    }
-
-  }
+  FrameButton btn2;
+  FrameButton btn3;
   private boolean firstEnter = true;
   public IPlayerState nextState = SharedStates.Idling;
   @Override
   public void onEnter(){
     
-    status_.add("txt", status_.new LineData("Text: ", "Some Text"));
+    status_.add("frame", status_.new LineData("Frame dimensions: ", ""));
+    status_.add("btn1", status_.new LineData("Btn1 (x,y): ", ""));
+    status_.add("btn3", status_.new LineData("Btn3 (x,y): ", ""));
+    status_.add("btn2", status_.new LineData("Btn2 (x,y): ", ""));
+    status_.add("mouse", status_.new LineData("Mouse (x,y): ", ""));
+    
+    status_.getFrame().addLine(new Seperator(status_.getFrame()));
     btn = new FrameButton(status_, "Click Me!");
+    btn3 = new FrameButton(status_, "Btn3");
     btn.onSelect(() -> {
+      SharedStates.Idling.keepAlive(true);
       this.next = nextState;
     });
-    status_.getFrame().addPart(btn);
+    btn2 = new FrameButton(status_, "Some Fn");
+    btn2.onSelect(()->{
+      APIContext.get().script().stop(null);
+    });
     firstEnter = false;
   }
 
@@ -62,11 +65,26 @@ public class StatusFrameTestState extends IPlayerState {
       // System.out.println("Running onEnter()");
       this.onEnter();
     }
-    String status = String.valueOf(status_.getFrame().getLastBounds().getHeight())
-      .concat("h x ")
-      .concat(String.valueOf(status_.getFrame().getLastBounds().getWidth()))
-      .concat("w");
-    // System.out.println(status);
+    int frameH = (int)status_.getFrame().getLastBounds().getHeight();
+    int frameW = (int)status_.getFrame().getLastBounds().getWidth();
+    Rectangle frameRec = status_.getFrame().getLastBounds().getBounds();
+    String status = String.valueOf(frameW)
+      .concat(" x ")
+      .concat(String.valueOf(frameH))
+      .concat(" @ (")
+      .concat(String.valueOf(frameRec.x)
+      .concat(",")
+      .concat(String.valueOf(frameRec.y)))
+      .concat(")");
+      
+    status_.update("frame", status);
+    status_.update("btn1", btn.toString());
+    status_.update("btn2", btn2.toString());
+    status_.update("btn3", btn3.toString());
+    status_.update("mouse", "("+APIContext.get().mouse().getX() + ","+APIContext.get().mouse().getY()+")");
+    //   System.out.println(status);
+    // System.out.println(btn);
+    // System.out.println(btn2);
     return next;
   }
 

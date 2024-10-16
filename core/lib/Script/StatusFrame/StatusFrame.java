@@ -16,7 +16,6 @@ public class StatusFrame {
   private Dimension2D freeArea; 
   public StatusFrame(String title){
     frame_ = new PaintFrame(title);
-    
   }
   public Dimension2D availableSpace(){
     int x = (int)frame_.getLastBounds().getX();
@@ -67,6 +66,6 @@ public class StatusFrame {
   }
   public void draw(Graphics2D g, APIContext ctx){
     
-    frame_.draw(g, 50, 200, ctx);
+    frame_.draw(g, 50, 100, ctx);
   }
 }
