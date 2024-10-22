@@ -6,7 +6,13 @@ public class MyPlayer {
   private IPlayerState currentState_;
   
   public MyPlayer(IPlayerState initState){
-    this.currentState_ = IPlayerState.Enter(initState);
+    this.currentState_ = initState;
+  }
+  public MyPlayer(IPlayerState initState, boolean runOnEnter){
+    if(runOnEnter)
+      this.currentState_ = IPlayerState.Enter(initState);
+    else
+      this.currentState_ = initState;
   }
   
   public IPlayerState currentState(){

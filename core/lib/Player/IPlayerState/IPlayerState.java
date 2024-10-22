@@ -9,16 +9,19 @@ import java.util.function.Supplier;
 
 public abstract class IPlayerState {
   public abstract int  actionTime();
-  public abstract String status();
-  public abstract String stateName();
+  public String status(){ return "IPlayerState"; };
+  public String stateName(){return "IPlayerState"; };
 
   protected StatusFrame status;
-  protected Supplier<IPlayerState> updateStrategy = () -> {
-    return this;
-  };
+  public void setUpdateStrategy(Supplier<IPlayerState> strategy){
+    this.updateStrategy = strategy;
+  }
+  protected Supplier<IPlayerState> updateStrategy = null;
 
   /// TODO: Make this `public final` and have IPlayerState classes provide an updateStrategy
   public IPlayerState update(){
+    if(updateStrategy == null)
+      throw new UnsupportedOperationException("IPlayerState implementations require an initial update strategy");
     return this.updateStrategy.get();
   }
 

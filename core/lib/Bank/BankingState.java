@@ -11,6 +11,8 @@ public class BankingState extends IPlayerState{
   private int actionTime_ = 1000;
   public boolean withdrawsFirst_ = true;
 
+  private boolean depositInventory = false;
+
   private ArrayList<Deposit> deposits_ = new ArrayList<Deposit>();
   private ArrayList<Withdraw> withdraws_ = new ArrayList<Withdraw>();
   public IPlayerState nextState;
@@ -71,9 +73,15 @@ public class BankingState extends IPlayerState{
       APIContext.get().bank().open();
       return this;
     }
-    return runBankActions();
+    return depositInventory
+     ? dumpInventory()
+     : runBankActions();
   }
-
+  public void setDepositInventory(boolean v){ this.depositInventory = v; }
+  private IPlayerState dumpInventory() {
+    APIContext.get().bank().depositInventory();
+    return nextState;
+  }
   @Override
   public int actionTime() { return AntiBan.time.MaskActionTime(this.actionTime_, TypicalActionTime.SHORT); }
   @Override
