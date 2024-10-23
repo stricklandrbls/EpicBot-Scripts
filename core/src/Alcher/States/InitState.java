@@ -2,7 +2,7 @@ package src.Alcher.States;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.function.*;
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.entity.ItemWidget;
 
@@ -13,10 +13,16 @@ import src.Alcher.Constants;
 
 public class InitState extends IPlayerState{
   private String statusStr_ = "Awaiting Item Selection";
-  @Override
-  public void onEnter(){
+  private Supplier<IPlayerState> updater = () -> {
+    return this;
+  };
+  public InitState(){
+    this.updateStrategy = updater;
     this.status = new StatusFrame("Unique Items");
     this.status.add("item", this.status.new LineData("Item Selected: ", "None"));
+  }
+  @Override
+  public void onEnter(){
     List<ItemWidget> alchables = APIContext.get().inventory().getItems();
     ArrayList<String> uniques = new ArrayList<String>();
     

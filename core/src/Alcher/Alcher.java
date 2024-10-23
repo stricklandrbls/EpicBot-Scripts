@@ -23,7 +23,7 @@ public class Alcher extends LoopScript{
 
   @Override
   public boolean onStart(String... arg0) {
-    Player = new MyPlayer(Constants.InitialState);
+    Player = new MyPlayer(Constants.InitialState, true);
     return true;
   }
 

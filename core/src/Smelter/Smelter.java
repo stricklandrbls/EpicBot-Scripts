@@ -35,6 +35,8 @@ public class Smelter extends LoopScript {
     }
 
     player = new MyPlayer(Constants.SmeltingState);
+    // System.out.println("Stack size: " + Constants.Cannonball.currentInventoryAmount());
+    // player = new MyPlayer(SharedStates.Idling);
     return true;
   }
   

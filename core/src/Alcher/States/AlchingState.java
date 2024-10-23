@@ -1,6 +1,7 @@
 package src.Alcher.States;
 
 import java.awt.Graphics2D;
+import java.util.function.*;
 
 import com.epicbot.api.shared.APIContext;
 import com.epicbot.api.shared.entity.ItemWidget;
@@ -18,35 +19,35 @@ public class AlchingState extends IPlayerState{
   private int         itemCount_ = 0;
   private boolean     spellReady_ = false;
   private int         stateTime_ = 500;
-
-  public AlchingState(){
-    this.updateStrategy = () -> {
-      if(APIContext.get().localPlayer().isAnimating()){
-        this.itemCount_ = item_.getStackSize();
-        statusFrame_.update("count", itemCount_);
-        APIContext.get().tabs().open(Tabs.MAGIC);
-        AntiBan.mouse.CheckFigit();
-        return this;
-      }
-  
-      if(this.itemCount_ <= 0 || this.item_ == null){
-        return Constants.Idling;
-      }
-  
-      if(!this.spellReady_){
-        APIContext.get().magic().cast(Spell.Modern.HIGH_LEVEL_ALCHEMY);
-        this.spellReady_ = true;
-      }
-      else {
-        if(!APIContext.get().tabs().isOpen(Tabs.INVENTORY))
-          APIContext.get().tabs().open(Tabs.INVENTORY);
-          
-        APIContext.get().mouse().click(item_.getRandomPoint());
-        AntiBan.mouse.MoveOffscreenOrFigit();
-        this.spellReady_ = false;
-      }
+  private Supplier<IPlayerState> updater  = () -> {
+    if(APIContext.get().localPlayer().isAnimating()){
+      this.itemCount_ = item_.getStackSize();
+      statusFrame_.update("count", itemCount_);
+      APIContext.get().tabs().open(Tabs.MAGIC);
+      AntiBan.mouse.CheckFigit();
       return this;
-    };
+    }
+
+    if(this.itemCount_ <= 0 || this.item_ == null){
+      return IPlayerState.Enter(Constants.InitialState);
+    }
+
+    if(!this.spellReady_){
+      APIContext.get().magic().cast(Spell.Modern.HIGH_LEVEL_ALCHEMY);
+      this.spellReady_ = true;
+    }
+    else {
+      if(!APIContext.get().tabs().isOpen(Tabs.INVENTORY))
+        APIContext.get().tabs().open(Tabs.INVENTORY);
+        
+      APIContext.get().mouse().click(item_.getRandomPoint());
+      AntiBan.mouse.MoveOffscreenOrFigit();
+      this.spellReady_ = false;
+    }
+    return this;
+  };
+  public AlchingState(){
+    this.updateStrategy = updater;
   }
   public void setItem(String itemName){
     this.item_ = APIContext.get().inventory().getItem(itemName);

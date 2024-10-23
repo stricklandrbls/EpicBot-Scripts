@@ -1,8 +1,10 @@
 package src.Smelter.States;
 
 import java.awt.Graphics2D;
+import java.util.function.Supplier;
 
 import com.epicbot.api.shared.APIContext;
+import com.epicbot.api.shared.entity.Item;
 import com.epicbot.api.shared.entity.SceneObject;
 import com.epicbot.api.shared.entity.WidgetChild;
 
@@ -19,7 +21,7 @@ import src.Smelter.Profiles.ISmeltingProfile;
 public class Smelting extends IPlayerState {
   private StatusFrame status_ = new StatusFrame("Smelter");
   private int actionTime_ = 1000;
-
+  private int madeCount_ = 0;
   private ISmeltingProfile currentProfile = null;
   private boolean startInitiated = false;
   private boolean uiItemSelected = false;
@@ -30,7 +32,9 @@ public class Smelting extends IPlayerState {
   @Override
   public String stateName() { return "Smelting"; }
 
-
+  private Supplier<IPlayerState> updateWorking = () -> {
+    return this;
+  };
   @Override
   public IPlayerState update() {
     if(!currentProfile.canMake()){
@@ -41,8 +45,8 @@ public class Smelting extends IPlayerState {
       SharedStates.Banking.nextState = this;
       SharedStates.Banking.add(new Deposit(currentProfile.outputItem()));
       SharedStates.Banking.add(new Withdraw("Steel bar"));
+      this.currentProfile.addIteration();
       return SharedStates.Banking;
-      // APIContext.get().script().stop("Cannot make anymore ".concat(currentProfile.outputItem()));
     }
 
     if(startInitiated && this.amIdle() && !uiItemSelected){
@@ -60,6 +64,8 @@ public class Smelting extends IPlayerState {
     if(ready()){
       actionTime_ = 6000;
       status_.update("status", "Running");
+      
+      status_.update("made", currentProfile.getAmountMade() + currentProfile.currentInventoryAmount());
       return this;
     }
 
@@ -70,13 +76,14 @@ public class Smelting extends IPlayerState {
     }
     if(furnace.canReach(APIContext.get()) && !startInitiated){
       status_.update("status", "Going to furnace");
-      // APIContext.get().camera().turnTo(furnace.getLocation());
       furnace.click();
       startInitiated = true;
     }
     return this;
   }
-
+  @Override
+  public void onExit(){
+  }
 
   @Override
   public void draw(Graphics2D g, APIContext ctx){
@@ -90,6 +97,7 @@ public class Smelting extends IPlayerState {
     currentProfile = profile; 
     status_.add("profile", status_.new LineData("Profile Selected", currentProfile.outputItem()));
     status_.add("status", status_.new LineData("Status:", "Init..."));
+    status_.add("made", status_.new LineData(profile.outputItem()+" made:", 0));
   }
   private boolean ready(){
     return APIContext.get().inventory().getCount(currentProfile.reagents()) < currentProfile.maxReagents();
